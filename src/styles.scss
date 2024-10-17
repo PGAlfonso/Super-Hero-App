@@ -1,1 +1,23 @@
 /* You can add global styles to this file, and also import other style files */
+@import 'styles/mixins';
+@import 'styles/_variables';
+
+*{
+    box-sizing: border-box;
+}
+
+a, a:visited{
+    text-decoration: none;
+    color: initial;
+}
+
+.primary-button{
+    @include button-style($primary-color, #FFFFFF);
+}
+
+.secondary-button{
+    @include button-style($secondary-color, #FFFFFF);
+}
+
+
+
