@@ -46,15 +46,17 @@ export interface Images {
 export interface Hero {
     id: number;
     name: string;
-    slug: string;
-    powerStats: PowerStats;
-    apareance: Appearance;
-    biography: Biography;
-    work: Work;
-    connections: Connections;
-    images: Images;
+    slug?: string;
+    powerStats?: PowerStats;
+    apareance?: Appearance;
+    biography?: Biography;
+    work?: Work;
+    connections?: Connections;
+    images?: Images;
 }
 
 export interface HeroState {
     heroes: Hero[];
+    selectedHero: Hero | null;
+    filteredHeroes: Hero[];
 }
