@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { HeroService } from '../services/hero.service';
-import { Hero, HeroState } from '../interfaces/hero.interface';
+import { HeroService } from '@services/hero.service';
+import { Hero, HeroState } from '@interfaces/hero.interface';
 import { switchMap, tap, withLatestFrom } from 'rxjs';
 
 @Injectable({

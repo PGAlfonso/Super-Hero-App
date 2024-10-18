@@ -1,0 +1,27 @@
+<div class="hr-single-card">
+    @if(hero().id > 0){
+        <img src={{hero().images?.sm}} alt="hero.name">
+        <div class="card-section">            
+            <p class="hero-name">{{hero().name}}</p>
+            <p class="full-name">{{hero().biography?.fullName}}</p>
+        </div>
+        <div class="card-section">
+            <label>Origen</label>
+            <p>{{hero().biography?.placeOfBirth || "Desconocido"}}</p>
+        </div>  
+        <div class="card-section"> 
+            <label>Casa</label>
+            <p>{{hero().biography?.publisher}}</p>
+        </div>     
+        <div> 
+            <button class="icon-button" (click)="onEdit()">
+                <fa-icon [icon]="['fas', 'edit']" class="icon-input"></fa-icon>
+            </button>
+            <button class="icon-button" (click)="onDelete()">
+                <fa-icon [icon]="['fas', 'trash']" class="icon-input"></fa-icon>
+            </button>
+        </div>
+    }@else{
+        <p>No se ha podido cargar el elemento</p>
+    }
+</div>

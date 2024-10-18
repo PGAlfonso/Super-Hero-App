@@ -1,36 +1,45 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HeroStore } from './store/hero-store.service';
-import { Hero } from './interfaces/hero.interface';
+import { HeroStore } from '@store/hero-store.service';
+import { Hero } from '@interfaces/hero.interface';
 import { FormsModule } from '@angular/forms';
+import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, FormsModule],
+  imports: [RouterOutlet, FormsModule, FontAwesomeModule ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  heroes: Hero[] = [];
-  showFiltered: boolean = false;
-  filteredHeroes: Hero[] = [];
-  heroName: string = '';
+  private searchValue: string = '';
+  public filteredHeroes: Hero[] = [];
+  public showFiltered: boolean = false;
+  
 
-  constructor(private heroStore: HeroStore){}
 
-  ngOnInit(): void {
-    this.loadAllHeroes();
+
+
+  
+  private heroStore = inject( HeroStore );
+  public library = inject( FaIconLibrary );
+
+  constructor(){
+    this.library.addIcons(faSearch);
+  }
+
+  searchHero(){
+    this.heroStore.searchHeroesByName(this.searchValue);
   }
 
 
-  loadAllHeroes(): void{
-    this.heroStore.loadHeroes();
-    this.heroStore.heroes$.subscribe((heroes) => {
-      this.heroes = heroes;
-      this.showFiltered = false;
-    });
-  }
+
+  
+
+
+  
 
   searchHeroByName(name: string): void {
     this.heroStore.searchHeroesByName(name);

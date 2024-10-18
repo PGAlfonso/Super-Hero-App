@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Hero } from '../interfaces/hero.interface';
+import { Hero } from '@interfaces/hero.interface';
 import { delay, Observable, of } from 'rxjs';
 
 @Injectable({
@@ -8,6 +8,7 @@ import { delay, Observable, of } from 'rxjs';
 })
 export class HeroService {
   private baseUrl = `https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/all.json`;  
+  
 
   constructor(private http: HttpClient) { }
 

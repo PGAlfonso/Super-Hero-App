@@ -1,0 +1,71 @@
+@import '@globalStyles';
+
+.hr-single-card{
+    width: 100%;
+    height: 80px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.2rem 1rem;
+    margin: 0.2rem 0rem;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px -10px;
+    cursor: pointer; 
+    transition: 300ms;   
+    img{
+        padding: 0.5rem;
+        width: auto;
+        height: 100%;
+    }
+    .card-section{
+        display: inline;
+        margin: 0rem 0.2rem;
+        width: 25%;
+        height: 100%;
+        label, .full-name{
+            color:$secondary-color;
+            font-size: 12px;
+            width: 100%;
+            font-style: italic;
+        }
+        p{
+            width: 100%;
+            color: $primary-color;
+            font-size: 16px;
+            margin: 0px;
+        }
+    }    
+}
+.hr-single-card:hover{
+    background-color: #dddddd;
+}
+
+
+@media (max-width: 1366px) {
+    .hr-single-card{
+        height: 70px; 
+    }
+}
+
+@media (max-width: 720px) {
+    .hr-single-card{       
+        height: auto; 
+        flex-direction: column;
+        justify-content: Center;
+        padding: 0.5rem;
+        cursor: pointer;
+        img{
+            padding: 0.5rem;
+            margin: 0px auto;
+            width: 50%;
+            height: auto;
+        }
+        .card-section{
+            display: inline;
+            margin: 0.2rem 0rem;
+            width: 100%;
+            text-align: center;
+        }
+    }
+}
