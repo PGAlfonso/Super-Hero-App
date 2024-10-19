@@ -51,7 +51,7 @@ export class HeroStore extends ComponentStore<HeroState> {
       switchMap(([selectedHero, heroes]) =>
         this.heroService.updateHero(selectedHero, heroes).pipe(
           tap({
-            next: ({heroes, updatedHero}) => this.patchState({ heroes: heroes, selectedHero: updatedHero}),
+            next: (heroes) => this.patchState({ heroes: heroes }),
             error: (error) => console.error('Error al actualizar heroe', error)
           })
         ),

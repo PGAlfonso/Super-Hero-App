@@ -1,0 +1,152 @@
+<form [formGroup]="heroForm" (ngSubmit)="submitForm()">
+    <!-- Form Actions -->
+    <div class="form-actions">
+        <button class="primary-button" type="submit" >Guardar Heroe</button>
+        @if(!this.hero()?.id){
+            <button class="primary-button" type="button" (click)="heroForm.reset(this.resetValue)">Reiniciar</button>
+        }
+    </div>
+    
+    <!-- Hero Name and Slug -->
+    <div class="form-section">
+        <h3>Informacion General</h3>
+        <div class="form-group">
+            <label for="name">Nombre de Super Heroe <span class="required">*</span></label>
+            <input id="name" formControlName="name" type="text" placeholder="Nombre del Super Heroe" required appUppercase/>
+            @if(!heroForm.controls["name"].valid && showErrors){
+                <label class="error-message" (focus)="true"> El nombre es requerido. </label>
+            }
+        </div>
+
+        <div class="form-group">
+            <label for="slug">Slug</label>
+            <input id="slug" formControlName="slug" type="text" placeholder="ingrese el slug"/>
+        </div>
+    </div>
+
+    <!-- Power Stats -->
+    <div class="form-section">
+        <h3>Estadísticas de poder</h3>
+        <div class="form-group" formGroupName="powerstats">
+            <label for="intelligence">Inteligencia</label>
+            <input id="intelligence" formControlName="intelligence" type="number" min="0" max="100" />
+      
+            <label for="strength">Fortaleza</label>
+            <input id="strength" formControlName="strength" type="number" min="0" max="100" />
+            
+            <label for="speed">Velocidad</label>
+            <input id="speed" formControlName="speed" type="number" min="0" max="100" />
+            
+            <label for="durability">Durabilidad</label>
+            <input id="durability" formControlName="durability" type="number" min="0" max="100" />
+            
+            <label for="power">Poder</label>
+            <input id="power" formControlName="power" type="number" min="0" max="100" />
+            
+            <label for="combat">Combate</label>
+            <input id="combat" formControlName="combat" type="number" min="0" max="100" />
+        </div>
+    </div>
+
+    <!-- Appearance -->
+    <div class="form-section">
+        <h3>Apariencia</h3>
+        <div class="form-group" formGroupName="appearance">
+            <label for="gender">Género</label>
+            <input id="gender" formControlName="gender" type="text" />
+            
+            <label for="race">Raza</label>
+            <input id="race" formControlName="race" type="text" />
+            
+            <label for="height">Altura</label>
+            <input id="height" formControlName="height" type="text" placeholder="e.g., 6'2\''" />
+            
+            <label for="weight">Anchura</label>
+            <input id="weight" formControlName="weight" type="text" placeholder="e.g., 180 lbs" />
+            
+            <label for="eyeColor">Color de ojos</label>
+            <input id="eyeColor" formControlName="eyeColor" type="text" />
+            
+            <label for="hairColor">Color de cabello</label>
+            <input id="hairColor" formControlName="hairColor" type="text" />
+        </div>
+    </div>
+
+    <!-- Biography -->
+    <div class="form-section">
+        <h3>Biografía</h3>
+        <div class="form-group" formGroupName="biography">
+            <label for="fullName">Nombre completo</label>
+            <input id="fullName" formControlName="fullName" type="text" appUppercase/>
+            
+            <label for="alterEgos">Alter Egos</label>
+            <input id="alterEgos" formControlName="alterEgos" type="text"/>
+            
+            <label for="aliases">Alias</label>
+            <input id="aliases" formControlName="aliases" type="text" />
+            
+            <label for="placeOfBirth">Origen</label>
+            <input id="placeOfBirth" formControlName="placeOfBirth" type="text" />
+            
+            <label for="firstAppearance">Primera Aparición</label>
+            <input id="firstAppearance" formControlName="firstAppearance" type="text" />
+            
+            <label for="publisher">Editora / Casa</label>
+            <input id="publisher" formControlName="publisher" type="text" />
+            
+            <label for="alignment">Alineación</label>
+            <input id="alignment" formControlName="alignment" type="text" />
+        </div>
+    </div>
+
+    <!-- Work -->
+    <div class="form-section">
+        <h3>Trabajo</h3>
+        <div class="form-group" formGroupName="work">
+            <label for="occupation">Ocupación</label>
+            <input id="occupation" formControlName="occupation" type="text" />
+            
+            <label for="base">Base</label>
+            <input id="base" formControlName="base" type="text" />
+        </div>
+    </div>
+
+    <!-- Connections -->
+    <div class="form-section">
+        <h3>Conección</h3>
+        <div class="form-group" formGroupName="connections">
+            <label for="groupAffiliation">Afiliación de grupo</label>
+            <input id="groupAffiliation" formControlName="groupAffiliation" type="text" />
+            
+            <label for="relatives">Parientes</label>
+            <input id="relatives" formControlName="relatives" type="text" />
+        </div>
+    </div>
+
+    <!-- Images -->
+    <div class="form-section">
+        <h3>Imagenes</h3>
+        <div class="form-group" formGroupName="images">
+            <label for="xs">Url Imagen Mini</label>
+            <input id="xs" formControlName="xs" type="url" placeholder="Enter URL for extra small image" />
+            
+            <label for="sm">Url Imagen Pequeña</label>
+            <input id="sm" formControlName="sm" type="url" placeholder="Enter URL for small image" />
+            
+            <label for="md">Url Imagen Mediana</label>
+            <input id="md" formControlName="md" type="url" placeholder="Enter URL for medium image" />
+            
+            <label for="lg">Url Imagen Grande</label>
+            <input id="lg" formControlName="lg" type="url" placeholder="Enter URL for large image" />
+        </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+        <button class="primary-button" type="submit" >Guardar Heroe</button>
+        @if(!this.hero()?.id){
+            <button class="primary-button" type="button" (click)="heroForm.reset(this.resetValue)">Reiniciar</button>
+        }
+    </div>
+</form>
+  

@@ -18,29 +18,29 @@ export class HeroSingleCardComponent {
 
   public showConfirmModal: boolean = false;
   
+  
   constructor(library: FaIconLibrary){
     library.addIcons(faEdit,faTrash)
   }
 
-  onEdit(): void{
+  onEdit(): void{    
     this.edit.emit(this.hero());
   }
 
   onDelete(): void{
-    this.tooggleModal();    
+    this.toggleModal();    
   }
 
   onCancel(): void {
-    this.tooggleModal();
+    this.toggleModal();
   }
 
   onConfirm(): void {
     this.delete.emit(this.hero());
   }
 
-  tooggleModal(): void {
+  toggleModal(): void {
     this.showConfirmModal = !this.showConfirmModal;
   }
-
 
 }

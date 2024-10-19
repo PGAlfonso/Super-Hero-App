@@ -24,21 +24,21 @@ ul{
     list-style: none;
     padding: 0px;
 }
-input[type="text"],
-input[type="search"]{
-    padding: 0.2rem 1rem;
-    border: none;
-    outline: none;
-    box-shadow: 0px 4px 15px -6px;
-    border-radius: 5px;
+label{
+    margin: 5px 0px;
+    color: $secondary-color;
+}
+input, select{
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;    
+}
+input{
+    cursor: text;
 }
 select{
-    padding: 0.2rem 1rem;
-    border: none;
-    outline: none;
-    border-radius: 10px;
+    cursor:pointer;
 }
-
 .primary-button{
     @include button-style($secondary-color, #FFFFFF);
 }
@@ -63,6 +63,9 @@ select{
 .row{
     display: flex;
     flex-direction: row;
+}
+.required{
+    color: red;
 }
 
 

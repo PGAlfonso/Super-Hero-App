@@ -14,8 +14,18 @@
        </li>
     }
   </ul>
-  <button class="floating-button" (click)="onAddHero()">
+  <button class="floating-button" (click)="toggleDrawer()">
     <fa-icon [icon]="['fas', 'plus']"></fa-icon>
   </button>
   
 </div>
+
+
+@let title = selectedHero ? "Editando a " + selectedHero.name : "Nuevo Heroe";
+
+<app-hero-form-drawer title = {{title}} [isOpen] = "showDrawer" (close)="toggleDrawer()">
+  <app-hero-form 
+    [hero]="selectedHero"
+    (formSubmit)="onAddHero($event)"
+  />
+</app-hero-form-drawer>
