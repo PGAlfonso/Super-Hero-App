@@ -3,8 +3,9 @@
     color: $text-color;
     padding: 0.5rem 2rem;
     border: none;
-    border-radius: 10px;
+    border-radius: 5px;
     cursor: pointer;
+    box-shadow: 0px 4px 15px -6px #000000;
     transition: 300;
   
     &:hover {

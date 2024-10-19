@@ -1,42 +1,22 @@
-
-<div>
-  <h2>Hero Management</h2>
-
-  <!-- Formulario para buscar héroes -->
-  <div>
-    <input
-      [(ngModel)]="heroName"
-      placeholder="Buscar héroe por nombre"
-    />
-    <button (click)="searchHeroByName(heroName)">Buscar</button>
-  </div>
-
-  <!-- Lista de héroes -->
-  <ul>
-    @if( showFiltered ) {
-      @for( hero of filteredHeroes; track hero.id){
-        <li>
-          {{ hero.name }}
-          <button (click)="updateHero(hero)">Actualizar</button>
-          <button (click)="deleteHero(hero)">Eliminar</button>
-        </li>
-      }
-    }@else {
-      @for( hero of heroes; track hero.id){
-        <li>
-          {{ hero.name }}
-          <button (click)="updateHero(hero)">Actualizar</button>
-          <button (click)="deleteHero(hero)">Eliminar</button>
-        </li>
-      }
-    }
-    
-    
-  </ul>
-
-  <!-- Botón para agregar un nuevo héroe -->
-  <button (click)="addHero()">Agregar Nuevo Héroe</button>
+<div class="container">
+  <header class="row">
+    <div class="logo-container">
+      <img src="assets/logo-color.png" alt="logo largo calaber super hero web"/>
+    </div>    
+    <div class="form-group column">
+      <label>Busqueda por nombre</label>
+      <div class="row">
+        <input type="search" [(ngModel)]="searchValue" appUppercase>      
+          <button class="icon-button" (click)="searchHero()">
+            <fa-icon [icon]="['fas', 'search']" class="icon-input"></fa-icon>
+          </button>
+      </div>      
+    </div>
+  </header> 
+  <main>
+    <router-outlet />
+  </main>
 </div>
+ 
 
 
-<router-outlet />

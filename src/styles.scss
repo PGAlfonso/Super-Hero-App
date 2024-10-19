@@ -1,23 +1,68 @@
-/* You can add global styles to this file, and also import other style files */
 @import 'styles/mixins';
 @import 'styles/_variables';
+
 
 *{
     box-sizing: border-box;
 }
+
+html, body { 
+    height: 100%; 
+    margin: 0; 
+    font-family: Roboto, "Helvetica Neue", sans-serif; 
+    color: $primary-color;
+    background-color: $primary-color;
+}
+img { max-width: 100%; max-height: 100%;}
 
 a, a:visited{
     text-decoration: none;
     color: initial;
 }
 
-.primary-button{
-    @include button-style($primary-color, #FFFFFF);
+ul{
+    list-style: none;
+    padding: 0px;
+}
+input[type="text"],
+input[type="search"]{
+    padding: 0.2rem 1rem;
+    border: none;
+    outline: none;
+    box-shadow: 0px 4px 15px -6px;
+    border-radius: 5px;
+}
+select{
+    padding: 0.2rem 1rem;
+    border: none;
+    outline: none;
+    border-radius: 10px;
 }
 
-.secondary-button{
+.primary-button{
     @include button-style($secondary-color, #FFFFFF);
 }
 
+.secondary-button{
+    @include button-style($primary-color, #FFFFFF);
+}
+.icon-button{
+    @include button-style($secondary-color, #FFFFFF);
+    margin: 0rem 0.2rem;
+    padding: 0.5rem 1rem;
+}
+.icon-button-secondary{
+    @include button-style(#d3d3d3, $secondary-color);
+    margin: 0rem 0.2rem;
+    padding: 0.5rem 1rem;
+}
+.column{
+    display: flex;
+    flex-direction: column;
+}
+.row{
+    display: flex;
+    flex-direction: row;
+}
 
 

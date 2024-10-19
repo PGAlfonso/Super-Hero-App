@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
-import { HeroService } from '../services/hero.service';
-import { Hero, HeroState } from '../interfaces/hero.interface';
+import { HeroService } from '@services/hero.service';
+import { Hero, HeroState } from '@interfaces/hero.interface';
 import { switchMap, tap, withLatestFrom } from 'rxjs';
 
 @Injectable({
@@ -14,8 +14,8 @@ export class HeroStore extends ComponentStore<HeroState> {
     this.loadHeroes();
   }
 
-  readonly heroes$ = this.select(state => state.heroes);
-  readonly filteredHeroes$ = this.select(state => state.filteredHeroes);
+  readonly heroes$ = this.select(state => state.heroes.sort((a, b) => a.name.localeCompare(b.name)));
+  readonly filteredHeroes$ = this.select(state => state.filteredHeroes.sort((a, b) => a.name.localeCompare(b.name)));
   readonly selectedHero$ = this.select( state => state.selectedHero);
 
   readonly loadHeroes = this.effect((trigger$) => 
@@ -95,7 +95,7 @@ export class HeroStore extends ComponentStore<HeroState> {
         this.heroService.searchHeroesByName(name, heroes)
         .pipe(
           tap({
-            next: (heroes) => this.patchState({ filteredHeroes: heroes }),
+            next: (filteredHeroes) => this.patchState({ filteredHeroes }),
             error: (error) => console.error('Error al buscar heroe', error)
           })
         )

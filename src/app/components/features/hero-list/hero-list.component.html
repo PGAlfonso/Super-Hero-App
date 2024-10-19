@@ -1,0 +1,21 @@
+<div class="hero-list-contanier">
+  <app-hero-list-paginator 
+    [heroes]="showFiltered ? filteredHeroes : heroes"
+    (paginatedHeroes)="updatePagination($event)"
+  />
+  <ul>
+    @for(hero of paginatedHeroes; track hero.id){
+      <li>
+        <app-hero-single-card 
+          [hero]="hero" 
+          (edit)="onEditHero($event)" 
+          (delete)="onDeleteHero($event)" 
+        />
+       </li>
+    }
+  </ul>
+  <button class="floating-button" (click)="onAddHero()">
+    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+  </button>
+  
+</div>
