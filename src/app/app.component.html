@@ -6,8 +6,8 @@
     <div class="form-group column">
       <label>Busqueda por nombre</label>
       <div class="row">
-        <input type="search" (click)="searchHero()">      
-          <button class="icon-button">
+        <input type="search" [(ngModel)]="searchValue" appUppercase>      
+          <button class="icon-button" (click)="searchHero()">
             <fa-icon [icon]="['fas', 'search']" class="icon-input"></fa-icon>
           </button>
       </div>      

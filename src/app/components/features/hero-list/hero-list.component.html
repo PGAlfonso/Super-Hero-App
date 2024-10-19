@@ -1,12 +1,8 @@
 <div class="hero-list-contanier">
-  <div class="pagination-controls">
-    <label for="itemsPerPage">Resultados por página:</label>
-    <select id="itemsPerPage" [(ngModel)]="itemsPerPage" (change)="updatePagination()">
-      @for(option of itemsPerPageOptions; track $index){
-        <option [value]="option">{{ option }}</option>
-      }
-    </select>
-  </div>
+  <app-hero-list-paginator 
+    [heroes]="showFiltered ? filteredHeroes : heroes"
+    (paginatedHeroes)="updatePagination($event)"
+  />
   <ul>
     @for(hero of paginatedHeroes; track hero.id){
       <li>
@@ -18,9 +14,8 @@
        </li>
     }
   </ul>
-  <div class="pagination-buttons">
-    <button (click)="previousPage()" [disabled]="currentPage === 1">Anterior</button>
-    <span>Página {{ currentPage }} de {{ totalPages }}</span>
-    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Siguiente</button>
-  </div>
+  <button class="floating-button" (click)="onAddHero()">
+    <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+  </button>
+  
 </div>

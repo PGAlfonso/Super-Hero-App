@@ -3,37 +3,46 @@ import { HeroStore } from '@store/hero-store.service';
 import { Hero } from '@interfaces/hero.interface';
 import { HeroSingleCardComponent } from '@components/common/hero-single-card/hero-single-card.component';
 import { FormsModule } from '@angular/forms';
+import { HeroListPaginatorComponent } from '@components/common/hero-list-paginator/hero-list-paginator.component';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @Component({
   selector: 'app-hero-list',
   standalone: true,
-  imports: [HeroSingleCardComponent, FormsModule ],
+  imports: [HeroSingleCardComponent, FormsModule, HeroListPaginatorComponent, FontAwesomeModule ],
   templateUrl: './hero-list.component.html',
   styleUrl: './hero-list.component.scss'
 })
 export class HeroListComponent {
-  public heroStore = inject( HeroStore );
-  public heroes: Hero[] = [];
   public paginatedHeroes: Hero[] = [];
+  public heroes: Hero[] = [];
   public filteredHeroes: Hero[] = [];
-  public displayedColumns: string[] = ['name'];
   public showFiltered: boolean = false;
 
-  // Paginación
-  public itemsPerPageOptions: number[] = [5, 10, 50, 100];
-  public itemsPerPage: number = 5;
-  public currentPage: number = 1;
-  public totalPages: number = 1;
+  public heroStore = inject( HeroStore );
 
+  constructor(private library:FaIconLibrary){
+    this.library.addIcons(faPlus);
+  }
+  
   ngOnInit(): void {
     this.loadAllHeroes();
-    this.updatePagination();
   }
 
-  loadAllHeroes(): void{
-    this.heroStore.loadHeroes();
+  loadAllHeroes(): void{    
+    //subscripcion a los cambios de héroes generales y filtrados
     this.heroStore.heroes$.subscribe((heroes) => {
       this.heroes = heroes;
+      if (!this.showFiltered) {
+        this.updatePagination(heroes);
+      }
+    });
+
+    this.heroStore.filteredHeroes$.subscribe((filteredHeroes) => {
+      this.filteredHeroes = filteredHeroes;
+      this.showFiltered = filteredHeroes.length > 0;
+      this.updatePagination(this.showFiltered ? filteredHeroes : this.heroes);
     });
   }
 
@@ -41,40 +50,17 @@ export class HeroListComponent {
     console.log(heroId)
   }
 
-  onDeleteHero(heroId: Hero){
-    console.log(heroId);
+  onDeleteHero(hero: Hero){
+    this.heroStore.deleteHero(hero.id);
   }
 
-  paginate(): void {
-    const start: number = (this.currentPage - 1) * this.itemsPerPage;    
-    const end: number = start + +this.itemsPerPage;
-    console.log(start, end)
-    this.paginatedHeroes = this.heroes.slice(start, end);
-  }
+  updatePagination(values: Hero[]){    
+    this.paginatedHeroes = values;
+  } 
 
-  updatePagination(): void {
-    this.totalPages = Math.ceil(this.heroes.length / this.itemsPerPage);
-    this.paginate();
+  onAddHero(): void {
+    const newHero: Hero = { id: 0, name:"A New Hero" };
+    this.heroStore.addHero(newHero);
+    console.log(this.heroes)
   }
-
-  nextPage(): void {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-      this.paginate();
-    }
-  }
-
-  previousPage(): void {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-      this.paginate();
-    }
-  }
-
-  updateItemsPerPage(): void {
-    this.currentPage = 1;
-    this.updatePagination();
-  }
-
-  onAddHero(){}
 }

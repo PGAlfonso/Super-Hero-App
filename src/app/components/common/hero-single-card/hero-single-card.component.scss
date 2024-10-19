@@ -14,8 +14,8 @@
     cursor: pointer; 
     transition: 300ms;   
     img{
-        padding: 0.5rem;
-        width: auto;
+        padding: 0.5rem 0rem;
+        width: 40px;
         height: 100%;
     }
     .card-section{
@@ -35,11 +35,12 @@
             font-size: 16px;
             margin: 0px;
         }
-    }    
+    } 
+    &:hover{
+        background-color: #dddddd;
+    }   
 }
-.hr-single-card:hover{
-    background-color: #dddddd;
-}
+
 
 
 @media (max-width: 1366px) {

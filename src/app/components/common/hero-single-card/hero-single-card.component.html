@@ -1,13 +1,13 @@
 <div class="hr-single-card">
     @if(hero().id > 0){
-        <img src={{hero().images?.sm}} alt="hero.name">
+        <img [src]="hero().images?.sm || 'https://via.placeholder.com/150?text=No+Image'"  [alt]="hero().name">
         <div class="card-section">            
             <p class="hero-name">{{hero().name}}</p>
             <p class="full-name">{{hero().biography?.fullName}}</p>
         </div>
         <div class="card-section">
             <label>Origen</label>
-            <p>{{hero().biography?.placeOfBirth || "Desconocido"}}</p>
+            <p>{{hero().biography?.placeOfBirth || 'Desconocido'}}</p>
         </div>  
         <div class="card-section"> 
             <label>Casa</label>
@@ -25,3 +25,11 @@
         <p>No se ha podido cargar el elemento</p>
     }
 </div>
+@if(showConfirmModal){
+    <app-hero-confirm-modal
+        title = "Confirmar Eliminación"
+        messagge = "¿Estás seguro de que deseas eliminar a {{ hero().name }}?"
+        (confirm) = "onConfirm()"
+        (cancel)= "onCancel()"
+    />
+}

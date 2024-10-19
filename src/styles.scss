@@ -24,6 +24,20 @@ ul{
     list-style: none;
     padding: 0px;
 }
+input[type="text"],
+input[type="search"]{
+    padding: 0.2rem 1rem;
+    border: none;
+    outline: none;
+    box-shadow: 0px 4px 15px -6px;
+    border-radius: 5px;
+}
+select{
+    padding: 0.2rem 1rem;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+}
 
 .primary-button{
     @include button-style($secondary-color, #FFFFFF);
@@ -34,6 +48,11 @@ ul{
 }
 .icon-button{
     @include button-style($secondary-color, #FFFFFF);
+    margin: 0rem 0.2rem;
+    padding: 0.5rem 1rem;
+}
+.icon-button-secondary{
+    @include button-style(#d3d3d3, $secondary-color);
     margin: 0rem 0.2rem;
     padding: 0.5rem 1rem;
 }

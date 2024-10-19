@@ -1,3 +1,31 @@
+@import '@globalStyles';
+
 .hero-list-contanier{
     height: 100%;
+    .floating-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: $secondary-color;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: none;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      
+        &:hover {
+          background-color: darken($secondary-color, 15%);
+          box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+        }
+      
+        fa-icon {
+          font-size: 24px;
+        }
+    }
 }

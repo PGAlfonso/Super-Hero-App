@@ -1,0 +1,28 @@
+@import "@globalStyles";
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+    .modal-content {
+        background: #FFFFFF;
+        padding: 20px;
+        border-radius: 5px;
+        text-align: center;
+        h2{
+            color: $secondary-color;
+        }        
+    }
+    .modal-actions {
+        margin-top: 20px;
+        justify-content: center;
+        button{
+            margin: 0rem 1rem;
+        }
+    }
+}
