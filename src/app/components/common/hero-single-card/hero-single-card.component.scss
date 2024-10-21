@@ -1,4 +1,4 @@
-@import '@globalStyles';
+@import "../../../../styles.scss";
 
 .hr-single-card{
     width: 100%;
@@ -21,8 +21,9 @@
     .card-section{
         display: inline;
         margin: 0rem 0.2rem;
-        width: 25%;
+        width: 20%;
         height: 100%;
+        align-content: center;
         label, .full-name{
             color:$secondary-color;
             font-size: 12px;
@@ -34,8 +35,8 @@
             color: $primary-color;
             font-size: 16px;
             margin: 0px;
-        }
-    } 
+        }        
+    }
     &:hover{
         background-color: #dddddd;
     }   
@@ -46,6 +47,17 @@
 @media (max-width: 1366px) {
     .hr-single-card{
         height: 70px; 
+    }
+}
+
+@media (max-width: 990px) {
+    .hr-single-card{       
+        height: 70px;
+        .icon-button{
+            width: 30px;
+            height: 30px;
+            padding: 0px;
+        }
     }
 }
 
@@ -67,6 +79,11 @@
             margin: 0.2rem 0rem;
             width: 100%;
             text-align: center;
+        }
+        .icon-button{
+            width: 30px;
+            height: 30px;
+            padding: 0px;
         }
     }
 }

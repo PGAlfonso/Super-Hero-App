@@ -9,13 +9,12 @@ export class UppercaseDirective {
   constructor(private el: ElementRef) { }
 
   @HostListener('input', ['$event'])
-  onInputChange(event: Event){
+  onInputChange(event: KeyboardEvent){
     const input = event.target as HTMLInputElement;
-    const start = input.selectionStart;
-    const end = input.selectionEnd;
-
+    const start = input.selectionStart || 0;
+    const end = input.selectionEnd || 0;
+    
     input.value = input.value.toUpperCase();
     input.setSelectionRange(start, end);
   }
-
 }

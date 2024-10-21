@@ -73,7 +73,7 @@ export class HeroListComponent {
     }else{
       this.heroStore.updateHero(hero);
       this.selectedHero = null;
-    }    
+    }  
   }
 
   onEditHero(hero: Hero){    

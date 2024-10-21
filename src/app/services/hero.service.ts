@@ -22,13 +22,14 @@ export class HeroService {
     const filteredHeroes = heroes.filter(hero =>
       hero.name.toLowerCase().includes(name.toLowerCase())
     );
+    const result = name.trim().length === 0 ? heroes : filteredHeroes;
     
-    return of(filteredHeroes).pipe(delay(500));
+    return of(result).pipe(delay(500));
   };
 
   searchHeroesById(id: number, heroes: Hero[]): Observable<Hero | undefined> {
     const result = heroes.find(hero => hero.id === id)
-    return of(result).pipe(delay(500));
+    return of(result).pipe(delay(3000));
   }
 
   addHero(hero: Hero, heroes: Hero[]): Observable<Hero[]> {    

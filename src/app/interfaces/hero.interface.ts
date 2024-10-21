@@ -58,5 +58,7 @@ export interface Hero {
 export interface HeroState {
     heroes: Hero[];
     selectedHero: Hero | null;
+    searchValue: string;
     filteredHeroes: Hero[];
+    isLoading: boolean;
 }
