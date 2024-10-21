@@ -1,6 +1,6 @@
 <div class="hr-single-card">
     @if(hero().id > 0){
-        <img [src]="hero().images?.sm || 'https://via.placeholder.com/150?text=No+Image'"  [alt]="hero().name">
+        <img [src]="hero().images?.sm || 'https://upload.wikimedia.org/wikipedia/commons/a/a3/Image-not-found.png'"  [alt]="hero().name">
         <div class="card-section">            
             <p class="hero-name">{{hero().name}}</p>
             <p class="full-name">{{hero().biography?.fullName}}</p>
@@ -13,12 +13,15 @@
             <label>Casa</label>
             <p>{{hero().biography?.publisher}}</p>
         </div>     
-        <div> 
+        <div class="card-section"> 
             <button class="icon-button" (click)="onEdit()">
                 <fa-icon [icon]="['fas', 'edit']" class="icon-input"></fa-icon>
             </button>
             <button class="icon-button" (click)="onDelete()">
                 <fa-icon [icon]="['fas', 'trash']" class="icon-input"></fa-icon>
+            </button>
+            <button class="icon-button" (click)="onViewDetail()">
+                <fa-icon [icon]="['fas', 'eye']" class="icon-input"></fa-icon>
             </button>
         </div>
     }@else{

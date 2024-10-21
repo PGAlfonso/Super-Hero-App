@@ -7,8 +7,10 @@
       "@interfaces/*":["./src/app/interfaces/*"],
       "@services/*":["./src/app/services/*"],
       "@components/*":["./src/app/components/*"],
+      "@directives/*":["./src/app/directives/*"],
       "@store/*":["./src/app/store/*"],
       "@globalStyles":["./src/styles.scss"],
+      
     },
     "outDir": "./dist/out-tsc",
     "strict": true,

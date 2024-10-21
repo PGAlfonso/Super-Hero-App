@@ -1,8 +1,9 @@
 import { Component, input, output } from '@angular/core';
 import { Hero } from '@interfaces/hero.interface';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import { HeroConfirmModalComponent } from '@components/common/hero-confirm-modal/hero-confirm-modal.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-hero-single-card',
@@ -17,30 +18,35 @@ export class HeroSingleCardComponent {
   public delete = output<Hero>();
 
   public showConfirmModal: boolean = false;
+
   
-  constructor(library: FaIconLibrary){
-    library.addIcons(faEdit,faTrash)
+  
+  constructor(private router: Router, public  library: FaIconLibrary){
+    library.addIcons(faEdit,faTrash, faEye)
   }
 
-  onEdit(): void{
+  onEdit(): void{    
     this.edit.emit(this.hero());
   }
 
   onDelete(): void{
-    this.tooggleModal();    
+    this.toggleModal();    
   }
 
   onCancel(): void {
-    this.tooggleModal();
+    this.toggleModal();
   }
 
   onConfirm(): void {
     this.delete.emit(this.hero());
   }
 
-  tooggleModal(): void {
+  toggleModal(): void {
     this.showConfirmModal = !this.showConfirmModal;
   }
 
+  onViewDetail(): void{
+    this.router.navigate([`/hero/${this.hero().id}`])
+  }
 
 }

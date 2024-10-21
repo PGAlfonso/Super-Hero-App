@@ -1,0 +1,65 @@
+@if(hero$){
+    <div class="container">
+        <!-- Encabezado con imagen y nombre -->
+        <div class="hero-header">
+            <img [src]="(hero$ | async )?.images?.lg" alt="{{ (hero$ | async )?.name }}" class="hero-image" />
+            <h1>{{ (hero$ | async )?.name }}</h1>
+        </div>
+        <div class="row detail">
+            <!-- Biografía -->
+            <div class="hero-section">
+                <h2>Biografía</h2>
+                <ul>
+                    <li><label>Nombre completo:</label> {{ (hero$ | async )?.biography?.fullName || "Desconocido" }}</li>
+                    <li><label>Alter Egos:</label> {{ (hero$ | async )?.biography?.alterEgos || "Desconocido"}}</li>
+                    <li><label>Alias:</label> {{ (hero$ | async )?.biography?.aliases || "Desconocido"}}</li>
+                    <li><label>Origen:</label> {{ (hero$ | async )?.biography?.placeOfBirth || "Desconocido"}}</li>
+                    <li><label>Primera Aparición:</label> {{ (hero$ | async )?.biography?.firstAppearance || "Desconocido"}}</li>
+                    <li><label>Publicación:</label> {{ (hero$ | async )?.biography?.publisher || "Desconocido"}}</li>
+                    <li><label>Alineación:</label> {{ (hero$ | async )?.biography?.alignment || "Desconocido"}}</li>
+                </ul>
+            </div>
+            <!-- Estadísticas de Poder -->
+            <div class="hero-section">
+                <h2>Estadísticas de Poder</h2>
+                <ul>
+                    <li><label>Inteligencia:</label> {{ (hero$ | async )?.powerStats?.intelligence || "Desconocido"}}</li>
+                    <li><label>Destreza:</label> {{ (hero$ | async )?.powerStats?.strength || "Desconocido"}}</li>
+                    <li><label>Velocidad:</label> {{ (hero$ | async )?.powerStats?.speed || "Desconocido"}}</li>
+                    <li><label>Resistencia:</label> {{ (hero$ | async )?.powerStats?.durability || "Desconocido"}}</li>
+                    <li><label>Poder:</label> {{ (hero$ | async )?.powerStats?.power || "Desconocido"}}</li>
+                    <li><label>Combate:</label> {{ (hero$ | async )?.powerStats?.combat || "Desconocido"}}</li>
+                </ul>
+            </div>
+            <!-- Apariencia -->
+            <div class="hero-section">
+                <h2>Apariencia</h2>
+                <ul>
+                    <li><label>Género:</label> {{ (hero$ | async )?.apareance?.gender || "Desconocido"}}</li>
+                    <li><label>Raza:</label> {{ (hero$ | async )?.apareance?.race || "Desconocido"}}</li>
+                    <li><label>Altura:</label> {{ (hero$ | async )?.apareance?.height?.join(' / ') || "Desconocido"}}</li>
+                    <li><label>Peso:</label> {{ (hero$ | async )?.apareance?.weight?.join(' / ') || "Desconocido"}}</li>
+                    <li><label>Color de ojos:</label> {{ (hero$ | async )?.apareance?.eyeColor || "Desconocido"}}</li>
+                    <li><label>Color de cabello:</label> {{ (hero$ | async )?.apareance?.hairColor || "Desconocido"}}</li>
+                </ul>
+            </div>
+            <!-- Trabajo -->
+            <div class="hero-section">
+                <h2>Trabajo</h2>
+                <ul>
+                    <li><label>Ocupación:</label> {{ (hero$ | async )?.work?.occupation || "Desconocido"}}</li>
+                    <li><label>Base:</label> {{ (hero$ | async )?.work?.base || "Desconocido"}}</li>
+                </ul>
+            </div>
+            <!-- Conexiones -->
+            <div class="hero-section last">
+                <h2>Conexiones</h2>
+                <ul>
+                    <li><label>Casa:</label> {{ (hero$ | async )?.connections?.groupAffiliation || "Desconocido"}}</li>
+                    <li><label>Relaciones:</label> {{ (hero$ | async )?.connections?.relatives || "Desconocido"}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+

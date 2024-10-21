@@ -1,0 +1,14 @@
+<div class="modal" [class.open]="isOpen()">
+    <div class="container">
+        <div class="header">
+            <h2>{{ title() }}</h2>
+            <button class="icon-button" (click)="toggle()">
+                <fa-icon [icon]="['fas', 'close']" class="icon-input"></fa-icon>
+            </button>
+        </div>
+        <div class="content">
+            <ng-content></ng-content>
+        </div>
+    </div>
+</div>
+  
