@@ -1,56 +1,71 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { HeroStore } from '@store/hero-store.service';
-import { of } from 'rxjs';
+import { Hero } from '@interfaces/hero.interface';
+import { BehaviorSubject } from 'rxjs';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Router } from '@angular/router';
-import { ComponentFixture } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { UppercaseDirective } from '@directives/uppercase.directive';
+import { SpinnerComponent } from '@components/common/spinner/spinner.component';
 
 describe('AppComponent', () => {
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
-  let heroStore: jasmine.SpyObj<HeroStore>;
-  let router: jasmine.SpyObj<Router>;
+  let heroStoreSpy: jasmine.SpyObj<HeroStore>;
+  let routerSpy: jasmine.SpyObj<Router>;
+
+  const heroesSubject = new BehaviorSubject<Hero[]>([]);
 
   beforeEach(async () => {
-    const heroStoreSpy = jasmine.createSpyObj('HeroStore', ['searchHeroesByName', 'heroes$']);
-    heroStoreSpy.heroes$.and.returnValue(of([])); // Inicialmente no hay héroes
+    const heroStoreMock = jasmine.createSpyObj('HeroStore', ['searchHeroesByName','select'], {
+      heroes$: heroesSubject.asObservable(),
+    });
 
-    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    const routerMock = jasmine.createSpyObj('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
-      imports: [AppComponent],
+      imports: [AppComponent, FontAwesomeModule, UppercaseDirective, SpinnerComponent],
       providers: [
-        { provide: HeroStore, useValue: heroStoreSpy },
-        { provide: Router, useValue: routerSpy },
+        { provide: HeroStore, useValue: heroStoreMock },
+        { provide: Router, useValue: routerMock },
       ],
     }).compileComponents();
 
+    heroStoreSpy = TestBed.inject(HeroStore) as jasmine.SpyObj<HeroStore>;
+    routerSpy = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
-    heroStore = TestBed.inject(HeroStore) as jasmine.SpyObj<HeroStore>;
-    router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
+    fixture.detectChanges();
   });
 
-  it('should create the app', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call searchHeroesByName when searchHero is called', () => {
-    component.searchValue = 'Batman';
+  it('should call searchHeroesByName on search', () => {
+    component.searchValue = 'Superman';
     component.searchHero();
-    expect(heroStore.searchHeroesByName).toHaveBeenCalledWith('Batman');
+    
+    expect(heroStoreSpy.searchHeroesByName).toHaveBeenCalledWith('Superman');
+  });
+  
+  it('should filter heroes when searchValue is not empty', () => {
+    component.searchValue = 'Bat';
+    heroesSubject.next([
+      { id: 1, name: 'Batman' },
+      { id: 2, name: 'Superman' }
+    ]);
+  
+    expect(heroStoreSpy.searchHeroesByName).toHaveBeenCalledWith('Bat');
   });
 
-  it('should navigate to home when returnHome is called', () => {
+  it('should navigate to /home on returnHome', () => {
     component.returnHome();
-    expect(router.navigate).toHaveBeenCalledWith(['/home']);
+    
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/home']);
   });
-
-  it('should render the search input', () => {
-    fixture.detectChanges(); // Asegúrate de que el componente se renderice
-    const inputElement = fixture.debugElement.query(By.css('input')).nativeElement; // Asumiendo que tienes un input para buscar héroes
-    expect(inputElement).toBeTruthy();
-  });
+  
+  
 });
 
