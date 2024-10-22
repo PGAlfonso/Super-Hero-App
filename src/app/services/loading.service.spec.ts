@@ -5,26 +5,24 @@ describe('LoadingService', () => {
   let service: LoadingService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [LoadingService]
+    });
     service = TestBed.inject(LoadingService);
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-
   it('should initialize with isLoading set to false', () => {
-    expect(service.isLoading()).toBeFalse(); // Verifica que isLoading inicie en false
+    expect(service.isLoading()).toBe(false);
   });
 
-  it('should set isLoading to true when show is called', () => {
+  it('should set isLoading to true when show() is called', () => {
     service.show();
-    expect(service.isLoading()).toBeTrue(); // Verifica que isLoading sea true tras llamar a show
+    expect(service.isLoading()).toBe(true);
   });
 
-  it('should set isLoading to false when hide is called', () => {
-    service.show(); // Primero se muestra
-    service.hide(); // Luego se oculta
-    expect(service.isLoading()).toBeFalse(); // Verifica que isLoading sea false tras llamar a hide
+  it('should set isLoading to false when hide() is called', () => {
+    service.show(); // Primero lo activamos
+    service.hide(); // Luego lo desactivamos
+    expect(service.isLoading()).toBe(false);
   });
 });

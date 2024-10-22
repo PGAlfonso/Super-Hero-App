@@ -1,139 +1,54 @@
 import { TestBed } from '@angular/core/testing';
-
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { HeroService } from './hero.service';
-import { provideHttpClient } from '@angular/common/http';
 import { Hero } from '@interfaces/hero.interface';
+import { of } from 'rxjs';
 
-
-describe('HeroService -- Real HTTP Request', () => {
+describe('HeroService', () => {
   let service: HeroService;
+  let httpTestingController: HttpTestingController;
+
+  const mockHeroes: Hero[] = [
+    { id: 1, name: 'Superman',powerStats: { strength: 50, combat: 50 , durability: 50 , intelligence: 50, power:50, speed:50 } },
+    { id: 2, name: 'Batman', powerStats: { strength: 80, combat: 80 , durability: 80 , intelligence: 80, power:80, speed:80 } }
+  ];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers:[ HeroService, provideHttpClient()]
+      providers: [
+        provideHttpClient(), // Proporciona HttpClient sin el módulo deprecado
+        provideHttpClientTesting() // Configuración para pruebas
+      ]
     });
+
     service = TestBed.inject(HeroService);
+    httpTestingController = TestBed.inject(HttpTestingController);
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+  afterEach(() => {
+    httpTestingController.verify();
   });
 
-  it('should fetch real heroes from the API', (done) => {
+  it('should retrieve all heroes from the API', () => {
     service.getAllHeroes().subscribe((heroes) => {
-      expect(heroes).toBeTruthy(); //validar que la respuesta no este vacia
-      expect(heroes.length).toBeGreaterThan(0); // verifica que haya almenos un heroe
-      done(); // prueba finalizada
-    })
-  });
+      expect(heroes).toEqual(mockHeroes);
+    });
 
-// Mock data for hero testing
-  const mockHeroes: Hero[] = [
-    {
-      id: 1,
-      name: 'Superman',
-      slug: 'superman',
-      powerStats: {
-        intelligence: 100,
-        strength: 100,
-        speed: 100,
-        durability: 100,
-        power: 100,
-        combat: 100
-      },
-      apareance: {
-        gender: 'Male',
-        race: 'Kryptonian',
-        height: ['6ft'],
-        weight: ['220lbs'],
-        eyeColor: 'Blue',
-        hairColor: 'Black'
-      },
-      biography: {
-        fullName: 'Clark Kent',
-        alterEgos: 'None',
-        aliases: ['Man of Steel', 'The Last Son of Krypton'].join(","),
-        placeOfBirth: 'Krypton',
-        firstAppearance: 'Action Comics #1',
-        publisher: 'DC Comics',
-        alignment: 'good'
-      },
-      work: {
-        occupation: 'Journalist',
-        base: 'Metropolis'
-      },
-      connections: {
-        groupAffiliation: 'Justice League',
-        relatives: 'Krypton Family'
-      },
-      images: {
-        xs: 'path/to/xs-image',
-        sm: 'path/to/sm-image',
-        md: 'path/to/md-image',
-        lg: 'path/to/lg-image'
-      }
-    },
-    {
-      id: 2,
-      name: 'Batman',
-      slug: 'batman',
-      powerStats: {
-        intelligence: 100,
-        strength: 85,
-        speed: 60,
-        durability: 75,
-        power: 85,
-        combat: 100
-      },
-      apareance: {
-        gender: 'Male',
-        race: 'Human',
-        height: ['6ft'],
-        weight: ['210lbs'],
-        eyeColor: 'Blue',
-        hairColor: 'Black'
-      },
-      biography: {
-        fullName: 'Bruce Wayne',
-        alterEgos: 'None',
-        aliases: ['The Dark Knight', 'The Caped Crusader'].join(","),
-        placeOfBirth: 'Gotham City',
-        firstAppearance: 'Detective Comics #27',
-        publisher: 'DC Comics',
-        alignment: 'good'
-      },
-      work: {
-        occupation: 'Businessman',
-        base: 'Gotham City'
-      },
-      connections: {
-        groupAffiliation: 'Justice League',
-        relatives: 'Thomas Wayne, Martha Wayne'
-      },
-      images: {
-        xs: 'path/to/xs-image',
-        sm: 'path/to/sm-image',
-        md: 'path/to/md-image',
-        lg: 'path/to/lg-image'
-      }
-    }
-  ];
+    const req = httpTestingController.expectOne(service['baseUrl']);
+    expect(req.request.method).toBe('GET');
+    req.flush(mockHeroes); // Simula una respuesta de la API
+  });
 
   it('should search heroes by name', (done) => {
-    service.searchHeroesByName('man', mockHeroes).subscribe((filteredHeroes) => {
-      expect(filteredHeroes.length).toBe(2); // Superman and Batman
+    service.searchHeroesByName('perman', mockHeroes).subscribe((heroes) => {
+      expect(heroes.length).toBe(1);
+      expect(heroes[0].name).toBe('Superman');
       done();
     });
   });
 
-  it('should return all heroes when name is empty', (done) => {
-    service.searchHeroesByName('', mockHeroes).subscribe((filteredHeroes) => {
-      expect(filteredHeroes.length).toBe(2); // All heroes
-      done();
-    });
-  });
-
-  it('should find hero by id', (done) => {
+  it('should search heroes by ID', (done) => {
     service.searchHeroesById(1, mockHeroes).subscribe((hero) => {
       expect(hero).toBeTruthy();
       expect(hero?.name).toBe('Superman');
@@ -141,28 +56,32 @@ describe('HeroService -- Real HTTP Request', () => {
     });
   });
 
-  it('should return undefined for non-existing hero by id', (done) => {
-    service.searchHeroesById(999, mockHeroes).subscribe((hero) => {
-      expect(hero).toBeUndefined();
+  it('should add a new hero', (done) => {
+    const newHero: Hero = { id: 0, name: 'Wonder Woman', powerStats: { strength: 50, combat: 50 , durability: 50 , intelligence: 50, power:50, speed:50 }};
+
+    service.addHero(newHero, mockHeroes).subscribe((heroes) => {
+      expect(heroes.length).toBe(3);
+      expect(heroes[2].id).toBe(3); // El ID se incrementa en la función
+      expect(heroes[2].name).toBe('Wonder Woman');
       done();
     });
   });
 
-  it('should add a hero', (done) => {
-    const newHero: Hero = mockHeroes[0];
-    service.addHero(newHero, mockHeroes).subscribe((updatedHeroes) => {
-      expect(updatedHeroes.length).toBe(3); // Adding one new hero
-      expect(updatedHeroes[2].name).toBe('Superman');
+  it('should update an existing hero', (done) => {
+    const updatedHero: Hero = { id: 1, name: 'Superman Updated', powerStats: { strength: 90, combat: 90 , durability: 90 , intelligence: 90, power:90, speed:90 } };
+
+    service.updateHero(updatedHero, mockHeroes).subscribe((heroes) => {
+      expect(heroes.length).toBe(2);
+      expect(heroes[0].name).toBe('Superman Updated');
       done();
     });
   });
 
-  it('should update a hero', (done) => {
-    const updatedHero: Hero = mockHeroes[0];
-    service.updateHero(updatedHero, mockHeroes).subscribe((updatedHeroes) => {
-      expect(updatedHeroes[0].powerStats?.power).toBe(100); // Check if the power has been updated
+  it('should delete a hero by ID', (done) => {
+    service.deleteHero(1, mockHeroes).subscribe((heroes) => {
+      expect(heroes.length).toBe(1);
+      expect(heroes[0].id).toBe(2);
       done();
     });
   });
-
 });

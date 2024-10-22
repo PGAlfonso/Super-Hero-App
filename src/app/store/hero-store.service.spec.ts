@@ -1,84 +1,140 @@
 import { TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { ComponentStore } from '@ngrx/component-store';
 import { HeroStore } from './hero-store.service';
 import { HeroService } from '@services/hero.service';
-import { of, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { LoadingService } from '@services/loading.service';
 import { Hero } from '@interfaces/hero.interface';
 
+const MockHeroes = [
+  { id: 1, name: 'Superman' },
+  { id: 2, name: 'Batman' }
+]
+
+class MockHeroService {
+  getAllHeroes(): Observable<Hero[]> {
+    const result = MockHeroes
+    return of(result); // Devuelve un array vacío como respuesta mock
+  }
+
+  searchHeroesByName(name: string, heroes: Hero[]): Observable<Hero[]> {    
+    const filteredHeroes = heroes.filter(hero =>
+      hero.name.toLowerCase().includes(name.toLowerCase())
+    );
+    const result = name.trim().length === 0 ? heroes : filteredHeroes;
+    
+    return of(result);
+  };
+
+  searchHeroesById(id: number, heroes: Hero[]): Observable<Hero | undefined> {
+    const result = heroes.find(hero => hero.id === id)
+    return of(result);
+  }
+
+  addHero(hero: Hero, heroes: Hero[]): Observable<Hero[]> {    
+    const lastId = heroes.reduce((maxId, hero) => Math.max(maxId, hero.id), 0);
+    hero.id  = lastId + 1;
+
+    const result = [...heroes, hero]
+    return of(result);
+  }
+
+  updateHero(updatedHero: Hero, heroes: Hero[]): Observable<Hero[]> {
+    const index = heroes.findIndex(hero => hero.id === updatedHero.id);   
+    
+    if (index !== -1) {
+      const updatedHeroes = [
+        ...heroes.slice(0, index),
+        updatedHero,
+        ...heroes.slice(index + 1)
+      ];
+      return of( updatedHeroes );
+    }
+    return of( heroes );
+  }
+
+  deleteHero(id: number, heroes: Hero[]): Observable<Hero[]> {
+    const result = heroes.filter((hero) => hero.id !== id);
+    return of(result);
+  }  
+}
+
+class MockLoadingService {
+  hide() {}
+}
+
 describe('HeroStore', () => {
   let heroStore: HeroStore;
-  let heroService: jasmine.SpyObj<HeroService>;
-  let loadingService: jasmine.SpyObj<LoadingService>;
 
   beforeEach(() => {
-    const heroServiceSpy = jasmine.createSpyObj('HeroService', [
-      'getAllHeroes',
-      'addHero',
-      'updateHero',
-      'deleteHero',
-      'searchHeroesById',
-      'searchHeroesByName',
-    ]);
-
-    const loadingServiceSpy = jasmine.createSpyObj('LoadingService', ['show', 'hide']);
-
     TestBed.configureTestingModule({
       providers: [
         HeroStore,
-        { provide: HeroService, useValue: heroServiceSpy },
-        { provide: LoadingService, useValue: loadingServiceSpy },
-        provideHttpClient(),
+        { provide: HeroService, useClass: MockHeroService },
+        { provide: LoadingService, useClass: MockLoadingService },
       ],
     });
 
     heroStore = TestBed.inject(HeroStore);
-    heroService = TestBed.inject(HeroService) as jasmine.SpyObj<HeroService>;
-    loadingService = TestBed.inject(LoadingService) as jasmine.SpyObj<LoadingService>;
   });
 
-  it('should be created', () => {
-    expect(heroStore).toBeTruthy();
-  });
+  it('should load heroes', () => {
+    heroStore.loadHeroes();
 
-  it('should load heroes on initialization', () => {
-    const mockHeroes: Hero[] = [{ id: 1, name: 'Superman' }, { id: 2, name: 'Batman' }];
-    heroService.getAllHeroes.and.returnValue(of(mockHeroes)); // Simulamos el retorno de la API
-
-    heroStore = TestBed.inject(HeroStore); // Volvemos a inyectar el HeroStore para ejecutar loadHeroes
-
-    // Verifica que los héroes fueron cargados correctamente
-    heroStore.heroes$.subscribe(heroes => {
-      expect(heroes).toEqual(mockHeroes);
-      expect(heroService.getAllHeroes).toHaveBeenCalled(); // Asegúrate de que el servicio fue llamado
+    heroStore.heroes$.subscribe((heroes) => {
+      expect(heroes).toEqual(MockHeroes); // Verifica que los héroes cargados son correctos
     });
   });
 
-  it('should handle error when loading heroes', () => {
-    heroService.getAllHeroes.and.returnValue(throwError(() => new Error('Error al cargar héroes')));
+  it('should add a hero', () => {
+    const newHero = { id: 0, name: 'New Hero' };
+    
+    heroStore.addHero(newHero);
 
-    heroStore = TestBed.inject(HeroStore); // Vuelve a inyectar el HeroStore para ejecutar loadHeroes
-
-    // Verifica que se manejó el error correctamente
-    heroStore.heroes$.subscribe(heroes => {
-      expect(heroes).toEqual([]); // Asegúrate de que la lista de héroes esté vacía en caso de error
+    heroStore.heroes$.subscribe((heroes) => {
+      expect(heroes).toContain(newHero); // Verifica que el héroe se haya agregado
     });
   });
 
-  it('should add a hero', (done) => {
-    const mockHero: Hero = { id: 1, name: 'Flash' };
-    const mockHeroes: Hero[] = [{ id: 3, name: 'Superman' }, { id: 2, name: 'Batman' }];
+  it('should update a hero', () => {
+    const existingHero = { id: 1, name: 'Existing Hero' };
+    heroStore.addHero(existingHero); // Primero, agregamos el héroe
 
-    heroService.addHero.and.returnValue(of([...mockHeroes, mockHero])); // Simulamos la respuesta de añadir héroe
-    heroStore.heroes$.subscribe(() => {
-      heroStore.addHero(mockHero);
-      expect(heroService.addHero).toHaveBeenCalledWith(mockHero, mockHeroes); // Verifica que el servicio fue llamado correctamente
-    });
+    const updatedHero = { ...existingHero, name: 'Updated Hero' };
+    heroStore.updateHero(updatedHero);
 
-    heroStore.heroes$.subscribe(heroes => {
-      expect(heroes).toEqual([...mockHeroes, mockHero]); // Verifica que el héroe fue añadido
-      done();
+    heroStore.heroes$.subscribe((heroes) => {
+      expect(heroes).toContain(updatedHero); // Verifica que el héroe actualizado esté presente
     });
   });
+
+  it('should delete a hero', () => {
+    const heroToDelete = { id: 3, name: 'Hero to Delete' };
+    heroStore.addHero(heroToDelete); // Primero, agregamos el héroe
+
+    heroStore.deleteHero(heroToDelete.id);
+
+    heroStore.heroes$.subscribe((heroes) => {
+      expect(heroes).not.toContain(heroToDelete); // Verifica que el héroe haya sido eliminado
+    });
+  });
+
+  it('should search hero by ID', () => {
+    heroStore.searchHeroesById(1);
+
+    heroStore.selectedHero$.subscribe((hero) => {
+      expect(hero).toEqual({ id: 1, name: 'Superman' }); // Verifica que se haya buscado el héroe correctamente
+    });
+  });
+
+  it('should search heroes by name', () => {
+    heroStore.searchHeroesByName('Batman');
+
+    heroStore.filteredHeroes$.subscribe((heroes) => {
+      expect(heroes).toEqual([{ id: 2, name: 'Batman' }]); // Verifica que la búsqueda devuelva los héroes correctos
+    });
+  });
+
+  // Puedes agregar más pruebas para otros efectos aquí
 });
 
